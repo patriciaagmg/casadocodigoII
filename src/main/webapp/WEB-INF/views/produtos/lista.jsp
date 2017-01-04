@@ -13,7 +13,7 @@
 <div>${sucesso}</div>
 <div>${falha}</div>
 
-<h1> Lista de produtos </h1>
+<h1> <s:message code="listas.de.produtos"></s:message> </h1>
 
 	<table>
 		<tr>
