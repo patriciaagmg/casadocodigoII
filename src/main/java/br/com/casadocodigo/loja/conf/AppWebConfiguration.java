@@ -2,6 +2,15 @@ package br.com.casadocodigo.loja.conf;
 
 
 
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.text.InternationalFormatter;
+
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
+import org.springframework.cache.guava.GuavaCacheManager;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,9 +19,15 @@ import org.springframework.format.datetime.DateFormatter;
 import org.springframework.format.datetime.DateFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
+import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import com.google.common.cache.CacheBuilder;
 
 import br.com.casadocodigo.loja.controllers.HomeController;
 import br.com.casadocodigo.loja.daos.ProdutoDAO;
@@ -28,6 +43,7 @@ import br.com.casadocodigo.loja.models.CarrinhoCompras;
  */
 @EnableWebMvc
 @ComponentScan(basePackageClasses={HomeController.class,ProdutoDAO.class, FileSaver.class,CarrinhoCompras.class})
+@EnableCaching  //habilita o cache
 public class AppWebConfiguration {
 
 	
@@ -93,5 +109,45 @@ public class AppWebConfiguration {
 	public RestTemplate restTemplate(){
 		return new RestTemplate();		
 	}
+	
+	/**
+	 * Configurações AppWebConfiguration:
+	 * Método para prover o cache.Gerente de cache. Não usar o ConcurrentMapCacheManager do Spring.
+	 * O cache guardará até 100 livros, e estará ativo por 5 minutos.
+	 * @return CacheManager
+	 */
+	@Bean
+	public CacheManager cacheManager(){
+		CacheBuilder<Object,Object> builder = CacheBuilder.newBuilder()
+		.maximumSize(100)//100 foi escolhido devido a quantidade de livros carregados na tela onde o cache é utilizado.
+		.expireAfterAccess(5, TimeUnit.MINUTES);
+		
+		GuavaCacheManager manager = new GuavaCacheManager();		
+		manager.setCacheBuilder(builder);
+		
+		return manager;
+	
+	}
+	
+	/**
+	 * Vai resolver o retorno, se JSON ou html.
+	 */
+	@Bean
+	public ViewResolver contentNegociationViewResolver(ContentNegotiationManager manager){
+		
+		ArrayList<ViewResolver> viewResolvers = new ArrayList<>();
+		viewResolvers.add(internalResourceViewResolver());
+		viewResolvers.add(new JsonViewResolver());
+		
+		ContentNegotiatingViewResolver resolver = new ContentNegotiatingViewResolver();
+		resolver.setViewResolvers(viewResolvers);
+		resolver.setContentNegotiationManager(manager);
+		
+		
+		return resolver;
+		
+	}
+	
+
 	
 }
