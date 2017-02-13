@@ -156,6 +156,51 @@
 	    <artifactId>spring-context-support</artifactId>
 	    <version>4.1.0.RELEASE</version>
 	</dependency>
-
+	
+	
+	<!--  Dependencias do Spring Security -->
+	
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-config</artifactId>
+	    <version>4.0.0.RELEASE</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-taglibs</artifactId>
+	    <version>4.0.0.RELEASE</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-web</artifactId>
+	    <version>4.0.0.RELEASE</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-core</artifactId>
+	    <version>4.0.0.RELEASE</version>
+	</dependency>
+	
+	<!-- dependencias TESTES -->
+	<dependency>
+	    <groupId>junit</groupId>
+	    <artifactId>junit</artifactId>
+	    <version>4.12</version>
+	    <scope>test</scope>	
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-test</artifactId>
+	    <version>4.1.0.RELEASE</version>
+	    <scope>test</scope>
+	</dependency>
+	
 </dependencies>
+
+
+
 </project>

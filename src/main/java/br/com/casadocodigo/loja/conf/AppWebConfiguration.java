@@ -21,11 +21,15 @@ import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -159,6 +163,24 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter{
 		configurer.enable();
 	}
 	
+	
+	/**
+	 * Interceptador para tratamento de locale
+	 */
+	@Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LocaleChangeInterceptor());
+    }
+
+	/**
+	 * Resolvedor de locale através do cookie.
+	 * Vai guardar um cookie com a locale selecionado pelo usuário.
+	 * @return LocaleResolver
+	 */
+    @Bean
+    public LocaleResolver localeResolver(){
+        return new CookieLocaleResolver();
+    }
 
 	
 }

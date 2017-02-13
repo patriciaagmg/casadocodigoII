@@ -41,6 +41,7 @@
         <li><a href="${s:mvcUrl('PC#listar').build()}">Lista de Produtos</a></li>
         <li><a href="${s:mvcUrl('PC#form').build()}">Cadastro de Produtos</a></li>
     </ul>
+    <ul><li><a href="http://localhost:8080/casadocodigo/logout">Sair</a></li></ul>
     </div><!-- /.navbar-collapse -->
   </div>
 </nav>
